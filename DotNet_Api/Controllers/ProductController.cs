@@ -34,7 +34,7 @@ namespace DotNet_Api.Controllers
             return Ok(product);
         }
 
-        [HttpPost(Name = "CreateProduct")]
+        [HttpPost(Name = "CreateProduct")]                      //Create Product
         public IActionResult AddProduct(Product product)
         {
             Product productfromdb = productrepo.ProductfromDb(product.ID);
