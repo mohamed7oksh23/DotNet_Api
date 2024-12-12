@@ -80,7 +80,7 @@ namespace DotNet_Api.Controllers
                 return NotFound(new {Message = "Product Invalid"});
             }
             productrepo.Delete(id);
-            return StatusCode(201, new { Message = "Deleted Successfully" });
+            return StatusCode(200, new { Message = "Deleted Successfully" });
         }
     }
 }
