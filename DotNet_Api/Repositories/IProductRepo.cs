@@ -14,6 +14,5 @@ namespace DotNet_Api.Repositories
         
         public Product GetbyId(int id);
 
-        public Product ProductfromDb(int id);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using DotNet_Api.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DotNet_Api.Repositories
 {
@@ -34,7 +34,7 @@ namespace DotNet_Api.Repositories
 
         public Product GetbyId(int id)
         {
-            var product = context.Products.FirstOrDefault(x=>x.ID == id);
+            var product = context.Products.FirstOrDefault(x => x.ID == id);
             return product!;
         }
 
@@ -44,10 +44,5 @@ namespace DotNet_Api.Repositories
             context.SaveChanges();
         }
 
-        public Product ProductfromDb(int id)
-        {          
-            var product = context.Products.FirstOrDefault(x => x.ID == id);
-            return product!;
-        }
     }
 }

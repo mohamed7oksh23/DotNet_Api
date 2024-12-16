@@ -37,7 +37,7 @@ namespace DotNet_Api.Controllers
         [HttpPost(Name = "CreateProduct")]                      //Create Product
         public IActionResult AddProduct(Product product)
         {
-            Product productfromdb = productrepo.ProductfromDb(product.ID);
+            Product productfromdb = productrepo.GetbyId(product.ID);
             if (product == productfromdb)
             {
                 //return Conflict(new { Message = "Product is Already Existed"});
@@ -50,11 +50,13 @@ namespace DotNet_Api.Controllers
             else
             {
                 productrepo.Create(product);
-                return Created($"/{GetProducts()}", new { Message = "Product Created Successfully" });
+                return RedirectToAction("GetProducts", new { Message = "Product Created Successfully" });
+                //return CreatedAtAction("GetProducts", new { id = product.ID }, new { Message = "Product created successfully" });                
+                //return Created($"/{GetProducts()}", new { Message = "Product Created Successfully" });
             }
         }
 
-        [HttpPut]
+        [HttpPut]                                                       //Update Products
         [Route("{id}")]
         public IActionResult Updateproduct(int id,Product product)
         {
@@ -63,21 +65,33 @@ namespace DotNet_Api.Controllers
             {
                 return NotFound(new { Message = "Product Not Found" });
             }
+            else if (product.Name == null)
+            {
+                return BadRequest(new { Message = "Product Name cannot be null" });
+            } 
+            else if (product.Price == 0)
+            {
+                return BadRequest(new { Message = "Product Price cannot be null" });
+            }
+            else if (product.Description == null)
+            {
+                return BadRequest(new { Message = "Product Description cannot be null" });
+            }
             existproduct.Name = product.Name;
             existproduct.Description = product.Description;
             existproduct.Price = product.Price;
             productrepo.Update(existproduct);
-            return StatusCode(201, product);
+            return StatusCode(201, new { Message = "Product updated successfully", existproduct });
         }
 
-        [HttpDelete]
+        [HttpDelete]                                                    //Delete Product
         [Route("{id}")]
         public IActionResult DeleteProduct(int id)
         {
             var product = productrepo.GetbyId(id);
             if(product == null)
             {
-                return NotFound(new {Message = "Product Invalid"});
+                return NotFound(new {Message = "Product Invalid, The Product is not Existed"});
             }
             productrepo.Delete(id);
             return StatusCode(200, new { Message = "Deleted Successfully" });
